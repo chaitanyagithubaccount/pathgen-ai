@@ -19,12 +19,11 @@ public class RoadmapService {
     private final ObjectMapper objectMapper;
 
     public RoadmapResponse generateRoadmap(RoadmapRequest request) {
+        log.info("▶ Roadmap request | skill: {} | level: {} | {}days | {}h/day",
+                request.getSkill(), request.getLevel(), request.getDurationDays(), request.getDailyHours());
+
         String prompt = buildPrompt(request);
-        log.info("Generating roadmap for skill: {}, level: {}", request.getSkill(), request.getLevel());
-
         String jsonText = geminiService.generateContent(prompt);
-
-        // Strip markdown code fences if present
         jsonText = cleanJsonResponse(jsonText);
 
         try {
@@ -35,9 +34,12 @@ public class RoadmapService {
             roadmap.setDurationDays(request.getDurationDays());
             roadmap.setDailyHours(request.getDailyHours());
             roadmap.setGeneratedAt(LocalDateTime.now());
+            int totalDays = roadmap.getWeeks().stream().mapToInt(w -> w.getDays().size()).sum();
+            log.info("✔ Roadmap built | \"{}\" | {} weeks | {} days | id: {}",
+                    roadmap.getTitle(), roadmap.getWeeks().size(), totalDays, roadmap.getId());
             return roadmap;
         } catch (Exception e) {
-            log.error("Failed to parse roadmap JSON: {}", e.getMessage());
+            log.error("✘ Failed to parse roadmap JSON: {}", e.getMessage());
             throw new GeminiServiceException("AI returned an invalid response format. Please try again.");
         }
     }

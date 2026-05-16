@@ -38,8 +38,9 @@ public class GeminiService {
         Map<String, Object> requestBody = buildRequest(prompt);
         String url = apiUrl + "?key=" + apiKey;
 
-        log.debug("Calling Gemini API...");
+        log.info("→ Gemini request | model: {} | maxTokens: 8192", apiUrl.replaceAll(".*/models/([^:]+).*", "$1"));
 
+        long start = System.currentTimeMillis();
         try {
             String responseBody = webClient.post()
                     .uri(url)
@@ -49,7 +50,10 @@ public class GeminiService {
                     .bodyToMono(String.class)
                     .block();
 
-            return extractTextFromResponse(responseBody);
+            long elapsed = System.currentTimeMillis() - start;
+            String result = extractTextFromResponse(responseBody);
+            log.info("← Gemini response | {}ms | {} chars", elapsed, result.length());
+            return result;
 
         } catch (GeminiServiceException e) {
             throw e;

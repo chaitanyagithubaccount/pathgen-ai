@@ -14,7 +14,7 @@ const SKILL_SUGGESTIONS = [
 ]
 
 export default function RoadmapForm() {
-  const { saveRoadmap, setIsLoading, setError } = useRoadmap()
+  const { saveRoadmap, setIsLoading, setError, setLoadingDays } = useRoadmap()
 
   const [form, setForm] = useState({
     skill: '',
@@ -33,6 +33,7 @@ export default function RoadmapForm() {
 
     setLoading(true)
     setIsLoading(true)
+    setLoadingDays(Number(form.durationDays))
     setError(null)
 
     const toastId = toast.loading('Gemini AI is crafting your roadmap...')

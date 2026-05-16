@@ -22,6 +22,7 @@ export function RoadmapProvider({ children }) {
     }
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingDays, setLoadingDays] = useState(30)
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export function RoadmapProvider({ children }) {
       currentRoadmap, setCurrentRoadmap,
       history,
       isLoading, setIsLoading,
+      loadingDays, setLoadingDays,
       error, setError,
       saveRoadmap,
       toggleDayComplete,

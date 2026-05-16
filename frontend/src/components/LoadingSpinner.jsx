@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 
-export default function LoadingSpinner() {
+export default function LoadingSpinner({ days }) {
   return (
     <div className="flex flex-col items-center justify-center py-24 gap-6">
       <div className="relative">
@@ -23,7 +23,7 @@ export default function LoadingSpinner() {
           Gemini AI is thinking...
         </p>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Crafting your personalized 30-day roadmap
+          Crafting your personalized {days}-day roadmap
         </p>
       </div>
       <div className="flex gap-1.5">

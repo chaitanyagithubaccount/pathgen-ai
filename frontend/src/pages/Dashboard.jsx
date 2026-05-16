@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LayoutDashboard, BookOpen, Trophy, Calendar, AlertCircle, RotateCcw } from 'lucide-react'
 import Navbar from '../components/Navbar'
@@ -13,12 +13,16 @@ import { useRoadmap } from '../context/RoadmapContext'
 import clsx from 'clsx'
 
 export default function Dashboard() {
-  const { currentRoadmap, isLoading, error, setCurrentRoadmap, getCompletedCount } = useRoadmap()
+  const { currentRoadmap, isLoading, loadingDays, error, setCurrentRoadmap, getCompletedCount } = useRoadmap()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showForm, setShowForm] = useState(!currentRoadmap)
 
   const totalDays = currentRoadmap?.weeks?.reduce((acc, w) => acc + (w.days?.length || 0), 0) || 0
   const completed = currentRoadmap ? getCompletedCount(currentRoadmap.id, totalDays) : 0
+
+  useEffect(() => {
+    if (currentRoadmap) setShowForm(false)
+  }, [currentRoadmap])
 
   const handleNewRoadmap = () => {
     setShowForm(true)
@@ -46,7 +50,7 @@ export default function Dashboard() {
         {/* Main content */}
         <main className="flex-1 min-w-0 p-6 md:p-8">
           {/* Loading state */}
-          {isLoading && <LoadingSpinner />}
+          {isLoading && <LoadingSpinner days={loadingDays} />}
 
           {/* Error state */}
           {!isLoading && error && (
