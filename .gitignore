@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+target/
+
+# Environment files (NEVER commit these)
+.env
+.env.local
+.env.production
+backend/.env
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.class
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Java
+*.jar
+!mvnw
+!mvnw.cmd
+
+# Maven wrapper
+.mvn/
+
+# Test reports
+surefire-reports/
