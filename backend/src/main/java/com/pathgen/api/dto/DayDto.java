@@ -8,5 +8,6 @@ public class DayDto {
     private String topic;
     private String task;
     private String resource;
+    private String youtubeUrl;
     private String miniProject;
 }

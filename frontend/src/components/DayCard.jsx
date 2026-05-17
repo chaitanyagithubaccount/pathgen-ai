@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { CheckCircle2, Circle, ExternalLink, Wrench } from 'lucide-react'
+import { CheckCircle2, Circle, ExternalLink, Youtube, Wrench } from 'lucide-react'
 import { useRoadmap } from '../context/RoadmapContext'
 import clsx from 'clsx'
 
@@ -58,7 +58,20 @@ export default function DayCard({ day, roadmapId, index }) {
           </p>
 
           <div className="flex flex-wrap gap-3">
-            {/* Resource */}
+            {/* YouTube link */}
+            {day.youtubeUrl && isUrl(day.youtubeUrl) && (
+              <a
+                href={day.youtubeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-100 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
+              >
+                <Youtube className="w-3 h-3" />
+                YouTube
+              </a>
+            )}
+
+            {/* Website resource */}
             {day.resource && (
               isUrl(day.resource) ? (
                 <a

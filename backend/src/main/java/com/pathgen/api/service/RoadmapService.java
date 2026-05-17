@@ -99,21 +99,26 @@ public class RoadmapService {
         );
     }
 
-    // Post-processing: always replace resource with verified curated URL for known skills
+    // Post-processing: set both youtubeUrl (YouTube) and resource (website) from curated pools
     private void enrichResourceLinks(RoadmapResponse roadmap, String skill) {
-        List<String> pool = getResourcePool(skill);
-        if (pool.isEmpty()) return;
+        List<String> youtubePool = getYoutubePool(skill);
+        List<String> websitePool = getWebsitePool(skill);
         int idx = 0;
         for (WeekDto week : roadmap.getWeeks()) {
             for (DayDto day : week.getDays()) {
-                day.setResource(pool.get(idx % pool.size()));
-                log.debug("✔ Resource set for day {}: {}", day.getDay(), day.getResource());
+                if (!youtubePool.isEmpty()) {
+                    day.setYoutubeUrl(youtubePool.get(idx % youtubePool.size()));
+                }
+                if (!websitePool.isEmpty()) {
+                    day.setResource(websitePool.get(idx % websitePool.size()));
+                }
+                log.debug("✔ Day {} | youtube: {} | website: {}", day.getDay(), day.getYoutubeUrl(), day.getResource());
                 idx++;
             }
         }
     }
 
-    private List<String> getResourcePool(String skill) {
+    private List<String> getYoutubePool(String skill) {
         if (skill == null) return List.of();
         String s = skill.toLowerCase().trim();
 
@@ -122,8 +127,7 @@ public class RoadmapService {
                 "https://www.youtube.com/watch?v=eIrMbAQSU34",
                 "https://www.youtube.com/watch?v=Qgl81fPcLc8",
                 "https://www.youtube.com/playlist?list=PL553KfytvSHTPfvmg7u0VMCLrUyfuO6_K",
-                "https://www.youtube.com/watch?v=A74TOX803D0",
-                "https://docs.oracle.com/en/java/javase/21/docs/api/"
+                "https://www.youtube.com/watch?v=A74TOX803D0"
             );
         }
         if (s.contains("spring") || s.contains("boot")) {
@@ -132,25 +136,65 @@ public class RoadmapService {
                 "https://www.youtube.com/watch?v=1aWhYEynZQw",
                 "https://www.youtube.com/playlist?list=PLhfxuQVMs-nx3YQa3XJ9-4g_EoK0J8WhU",
                 "https://www.youtube.com/watch?v=zvR-Oif_nxg",
-                "https://www.youtube.com/watch?v=-mwpoE0x0JQ",
-                "https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/"
+                "https://www.youtube.com/watch?v=-mwpoE0x0JQ"
             );
         }
         if (s.contains("react")) {
             return List.of(
                 "https://www.youtube.com/watch?v=bMknfKXIFA8",
-                "https://www.youtube.com/watch?v=O6P86uwfdR0",
-                "https://react.dev/learn"
+                "https://www.youtube.com/watch?v=O6P86uwfdR0"
             );
         }
         if (s.contains("python")) {
             return List.of(
                 "https://www.youtube.com/watch?v=_uQrJ0TkZlc",
-                "https://www.youtube.com/playlist?list=PL-osiE80TeTt2d9bfVyTiXJA-UTHn6WwU",
-                "https://docs.python.org/3/tutorial/"
+                "https://www.youtube.com/playlist?list=PL-osiE80TeTt2d9bfVyTiXJA-UTHn6WwU"
             );
         }
         return List.of();
+    }
+
+    private List<String> getWebsitePool(String skill) {
+        if (skill == null) return List.of();
+        String s = skill.toLowerCase().trim();
+
+        if (s.contains("java") && !s.contains("spring") && !s.contains("boot")) {
+            return List.of(
+                "https://www.geeksforgeeks.org/java/",
+                "https://www.w3schools.com/java/",
+                "https://www.freecodecamp.org/news/tag/java/",
+                "https://docs.oracle.com/en/java/javase/21/docs/api/"
+            );
+        }
+        if (s.contains("spring") || s.contains("boot")) {
+            return List.of(
+                "https://www.geeksforgeeks.org/spring-boot/",
+                "https://www.baeldung.com/spring-boot",
+                "https://www.freecodecamp.org/news/tag/spring-boot/",
+                "https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/"
+            );
+        }
+        if (s.contains("react")) {
+            return List.of(
+                "https://www.freecodecamp.org/news/tag/react/",
+                "https://www.w3schools.com/react/",
+                "https://www.geeksforgeeks.org/reactjs/",
+                "https://react.dev/learn"
+            );
+        }
+        if (s.contains("python")) {
+            return List.of(
+                "https://www.freecodecamp.org/news/tag/python/",
+                "https://www.w3schools.com/python/",
+                "https://www.geeksforgeeks.org/python-programming-language/",
+                "https://docs.python.org/3/tutorial/"
+            );
+        }
+        return List.of(
+            "https://www.freecodecamp.org",
+            "https://www.geeksforgeeks.org",
+            "https://www.w3schools.com"
+        );
     }
 
     private String getCuratedResources(String skill) {
