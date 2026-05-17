@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Sparkles, Map, Target, Clock, CheckCircle2, ArrowRight, Moon, Sun, Zap, BookOpen, Trophy } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
+import { useRoadmap } from '../context/RoadmapContext'
 
 const features = [
   { icon: Sparkles, title: 'AI-Powered Roadmap', desc: 'Google Gemini generates a fully personalized day-by-day learning plan tailored to your level and goals.' },
@@ -15,6 +16,19 @@ const skills = ['Java', 'React', 'Python', 'Machine Learning', 'DevOps', 'Spring
 export default function LandingPage() {
   const navigate = useNavigate()
   const { isDark, toggle } = useTheme()
+  const { history, setCurrentRoadmap } = useRoadmap()
+
+  const handleSkillChipClick = (skill) => {
+    const existing = history.find(r => r.skill?.toLowerCase() === skill.toLowerCase())
+    if (existing) {
+      // Already have a roadmap for this skill — load it directly
+      setCurrentRoadmap(existing)
+      navigate('/dashboard')
+    } else {
+      // New skill — go to dashboard with skill pre-filled in form
+      navigate(`/dashboard?skill=${encodeURIComponent(skill)}`)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-brand-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 transition-colors duration-300">
@@ -97,7 +111,7 @@ export default function LandingPage() {
             <span
               key={s}
               className="px-3 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 shadow-sm cursor-pointer hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => handleSkillChipClick(s)}
             >
               {s}
             </span>

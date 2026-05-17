@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LayoutDashboard, BookOpen, Trophy, Calendar, AlertCircle, RotateCcw } from 'lucide-react'
 import Navbar from '../components/Navbar'
@@ -14,14 +15,29 @@ import clsx from 'clsx'
 
 export default function Dashboard() {
   const { currentRoadmap, isLoading, loadingDays, error, setCurrentRoadmap, getCompletedCount } = useRoadmap()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+
+  // Skill param is only present when landing page chip clicked for a NEW skill
+  const skillParam = searchParams.get('skill')
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [showForm, setShowForm] = useState(!currentRoadmap)
+  // Show form if: no current roadmap, OR a new skill was passed via URL
+  const [showForm, setShowForm] = useState(!currentRoadmap || !!skillParam)
+  const [prefilledSkill, setPrefilledSkill] = useState(skillParam || '')
 
   const totalDays = currentRoadmap?.weeks?.reduce((acc, w) => acc + (w.days?.length || 0), 0) || 0
   const completed = currentRoadmap ? getCompletedCount(currentRoadmap.id, totalDays) : 0
 
+  // Clean the ?skill= param from URL after we've captured it in state
   useEffect(() => {
-    if (currentRoadmap) setShowForm(false)
+    if (skillParam) {
+      navigate('/dashboard', { replace: true })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (currentRoadmap && !skillParam) setShowForm(false)
   }, [currentRoadmap])
 
   const handleNewRoadmap = () => {
@@ -81,7 +97,7 @@ export default function Dashboard() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <RoadmapForm />
+                <RoadmapForm initialSkill={prefilledSkill} />
               </motion.div>
             </AnimatePresence>
           )}

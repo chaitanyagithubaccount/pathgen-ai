@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Sparkles, Loader2, ChevronDown } from 'lucide-react'
 import { api } from '../services/api'
@@ -13,11 +13,11 @@ const SKILL_SUGGESTIONS = [
   'Node.js', 'TypeScript', 'System Design'
 ]
 
-export default function RoadmapForm() {
+export default function RoadmapForm({ initialSkill = '' }) {
   const { saveRoadmap, setIsLoading, setError, setLoadingDays } = useRoadmap()
 
   const [form, setForm] = useState({
-    skill: '',
+    skill: initialSkill,
     level: 'Beginner',
     dailyHours: 2,
     durationDays: 30,
@@ -26,6 +26,10 @@ export default function RoadmapForm() {
   const [loading, setLoading] = useState(false)
 
   const set = (key, val) => setForm(prev => ({ ...prev, [key]: val }))
+
+  useEffect(() => {
+    if (initialSkill) set('skill', initialSkill)
+  }, [initialSkill])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
