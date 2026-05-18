@@ -68,7 +68,7 @@ export default function LandingPage() {
               <Sparkles className="w-3.5 h-3.5" />
               Powered by Google Gemini AI
             </span>
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-sm font-semibold border border-amber-200 dark:border-amber-800">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-600 text-white text-sm font-semibold shadow-sm">
               #IITPatnaCapstone
             </span>
           </div>
