@@ -1,0 +1,237 @@
+{
+  "info": {
+    "name": "PathGen AI Backend API",
+    "_postman_id": "pathgen-ai-collection-v1",
+    "description": "API collection for PathGen AI — a personalized AI learning roadmap generator powered by Gemini 2.5 Flash.\n\n**Base URL:** `{{baseUrl}}`\n\n**Default:** `http://localhost:8080`\n\nAll endpoints are prefixed with `/api`. Responses use JSON. Error responses follow a consistent shape with `error`, `status`, and `timestamp` fields.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string",
+      "description": "Backend base URL. Change to your deployed URL (Railway, Vercel, etc.) as needed."
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Returns the service status. Use this to verify the backend is reachable before making other calls."
+          },
+          "response": [
+            {
+              "name": "200 OK — Service Up",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"status\": \"UP\",\n  \"service\": \"PathGen AI Backend\"\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Roadmap",
+      "item": [
+        {
+          "name": "Generate Roadmap — Beginner",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skill\": \"React\",\n  \"level\": \"BEGINNER\",\n  \"dailyHours\": 2,\n  \"durationDays\": 30,\n  \"learningGoal\": \"Build a full-stack web app with React\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/generate-roadmap",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "generate-roadmap"]
+            },
+            "description": "Generate a 30-day personalized roadmap for a beginner learning React.\n\n**Note:** This calls the Gemini 2.5 Flash API and may take up to 90 seconds.\n\n### Request fields\n| Field | Type | Required | Description |\n|---|---|---|---|\n| `skill` | string | Yes | The skill to learn (e.g. \"Java\", \"Python\", \"React\") |\n| `level` | string | Yes | `BEGINNER` \\| `INTERMEDIATE` \\| `ADVANCED` |\n| `dailyHours` | int | No (default: 2) | Daily study hours |\n| `durationDays` | int | No (default: 30) | Roadmap length in days |\n| `learningGoal` | string | No | Custom goal description |"
+          },
+          "response": [
+            {
+              "name": "200 OK — Roadmap Generated",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n  \"title\": \"30-Day React Mastery Roadmap\",\n  \"skill\": \"React\",\n  \"level\": \"BEGINNER\",\n  \"durationDays\": 30,\n  \"dailyHours\": 2,\n  \"generatedAt\": \"2026-05-18T10:30:00\",\n  \"weeks\": [\n    {\n      \"week\": 1,\n      \"goal\": \"Understand React fundamentals and JSX syntax\",\n      \"motivationalMessage\": \"Every expert was once a beginner. Start small, think big!\",\n      \"days\": [\n        {\n          \"day\": 1,\n          \"topic\": \"Introduction to React and JSX\",\n          \"task\": \"Set up your React development environment using Create React App or Vite. Explore the project structure and understand what JSX is.\",\n          \"resource\": \"https://react.dev/learn\",\n          \"youtubeUrl\": \"https://www.youtube.com/watch?v=Tn6-PIqc4UM\",\n          \"miniProject\": \"Create a Hello World component and render it in the browser\"\n        }\n      ]\n    }\n  ]\n}",
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "400 Bad Request — Validation Error",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"error\": \"Validation failed\",\n  \"status\": 400,\n  \"timestamp\": \"2026-05-18T10:30:00\",\n  \"fieldErrors\": {\n    \"skill\": \"must not be blank\",\n    \"level\": \"must not be null\"\n  }\n}",
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "503 Service Unavailable — Gemini API Error",
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"error\": \"Gemini API error: upstream timeout\",\n  \"status\": 503,\n  \"timestamp\": \"2026-05-18T10:30:00\"\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "Generate Roadmap — Intermediate",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skill\": \"Java\",\n  \"level\": \"INTERMEDIATE\",\n  \"dailyHours\": 3,\n  \"durationDays\": 60,\n  \"learningGoal\": \"Master Spring Boot and build production-ready REST APIs\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/generate-roadmap",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "generate-roadmap"]
+            },
+            "description": "Example for an intermediate learner wanting a 60-day Java/Spring Boot roadmap."
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Roadmap — Advanced",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skill\": \"Machine Learning\",\n  \"level\": \"ADVANCED\",\n  \"dailyHours\": 4,\n  \"durationDays\": 90,\n  \"learningGoal\": \"Implement and deploy production ML models at scale\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/generate-roadmap",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "generate-roadmap"]
+            },
+            "description": "Example for an advanced learner — 90-day Machine Learning roadmap with 4 hours/day."
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Roadmap — Minimal (required fields only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skill\": \"Python\",\n  \"level\": \"BEGINNER\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/generate-roadmap",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "generate-roadmap"]
+            },
+            "description": "Minimal request — only `skill` and `level` are required. The backend applies defaults: `dailyHours=2`, `durationDays=30`."
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Roadmap — Validation Error (missing skill)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"level\": \"BEGINNER\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/generate-roadmap",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "generate-roadmap"]
+            },
+            "description": "Intentionally missing `skill` to demonstrate 400 validation error response."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Progress",
+      "item": [
+        {
+          "name": "Save Progress — Mark Day Complete",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roadmapId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n  \"dayNumber\": 5,\n  \"completed\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/save-progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "save-progress"]
+            },
+            "description": "Save progress for a specific day in a roadmap.\n\n**Note:** The frontend currently uses `localStorage` for persistence. This endpoint is intended for future database integration and currently logs the update server-side.\n\n### Request fields\n| Field | Type | Description |\n|---|---|---|\n| `roadmapId` | string | UUID of the roadmap |\n| `dayNumber` | int | Day number being updated |\n| `completed` | boolean | Whether the day was completed |"
+          },
+          "response": [
+            {
+              "name": "200 OK — Progress Saved",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Progress saved\",\n  \"dayNumber\": 5,\n  \"completed\": true\n}",
+              "_postman_previewlanguage": "json"
+            }
+          ]
+        },
+        {
+          "name": "Save Progress — Mark Day Incomplete",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roadmapId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n  \"dayNumber\": 5,\n  \"completed\": false\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/save-progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "save-progress"]
+            },
+            "description": "Unmark a day as complete (toggle off)."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
