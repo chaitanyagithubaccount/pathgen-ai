@@ -63,10 +63,15 @@ export default function LandingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 text-sm font-semibold mb-6 border border-brand-200 dark:border-brand-800">
-            <Sparkles className="w-3.5 h-3.5" />
-            Powered by Google Gemini AI
-          </span>
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 text-sm font-semibold border border-brand-200 dark:border-brand-800">
+              <Sparkles className="w-3.5 h-3.5" />
+              Powered by Google Gemini AI
+            </span>
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-sm font-semibold border border-amber-200 dark:border-amber-800">
+              #IITPatnaCapstone
+            </span>
+          </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white leading-tight mb-6">
             Your Personalized<br />

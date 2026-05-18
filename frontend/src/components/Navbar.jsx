@@ -29,6 +29,11 @@ export default function Navbar({ onMenuToggle, menuOpen }) {
           </button>
         </div>
 
+        {/* Centre: capstone tag */}
+        <span className="hidden sm:inline-flex items-center px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-xs font-semibold border border-amber-200 dark:border-amber-800">
+          #IITPatnaCapstone
+        </span>
+
         {/* Right: actions */}
         <div className="flex items-center gap-2">
           <button
